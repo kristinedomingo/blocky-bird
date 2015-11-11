@@ -133,15 +133,17 @@ def game_function(ann, display):
         # collision
         # ---------
 
-        # if right side of bird hits pipe
+        # if right/top side of bird hits a pipe
         if((bird_x + BIRDSIZE > pipe_solid_x) and 
            (bird_y < pipe_hole_y)             and
            (bird_x < pipe_solid_x + pipe_width)):
             playing = False
-            #print "Score " + str(score)
-        if((bird_x > pipe_solid_x - BIRDSIZE) and not(bird_y + BIRDSIZE < pipe_hole_y + pipe_hole_height) and (bird_x < pipe_solid_x + pipe_width)):
+
+        # if the bottom side of the bird hits a pipe
+        if((bird_x + BIRDSIZE > pipe_solid_x)                   and
+           (bird_y + BIRDSIZE > pipe_hole_y + pipe_hole_height) and
+           (bird_x < pipe_solid_x + pipe_width)):
             playing = False
-            #print "Score " + str(score)
         
         # new pipe
         if(pipe_solid_x < -(pipe_width)):
@@ -150,18 +152,27 @@ def game_function(ann, display):
             pipe_hole_y = random.randint(20, WINDOWHEIGHT - pipe_hole_height - 20)
             score += 1
         
+        # ------------
+        # draw objects
+        # ------------
+
         if(display):
-            # display
-            DISPLAYSURF.fill(BGCOLOR)        
+            # background color
+            DISPLAYSURF.fill(BGCOLOR)
             # pipe solid
             pygame.draw.rect(DISPLAYSURF, GREEN, (pipe_solid_x, pipe_solid_y, pipe_width, pipe_height))
+
             # pipe hole
             pygame.draw.rect(DISPLAYSURF, PIPEHOLECOLOR, ((pipe_hole_x, pipe_hole_y, pipe_width, pipe_hole_height)))
+
             # bird
             pygame.draw.rect(DISPLAYSURF, YELLOW, (bird_x, bird_y, BIRDSIZE, BIRDSIZE))
-            # text
+
+            # text (score)
             textScore = str(score)
             label = fontObj.render(textScore, 1, WHITE)
+
+            # update display
             DISPLAYSURF.blit(label, (50, 50))
             pygame.display.update()
             FPSCLOCK.tick(FPS)

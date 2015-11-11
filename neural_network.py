@@ -56,6 +56,6 @@ class neuron:
 
 
 def evaluate_ann(ann):
-	score=blocky_bird.game_function(ann)
+	score=blocky_bird.game_function(ann, False)
 	return score
 

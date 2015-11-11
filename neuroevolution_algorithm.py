@@ -35,4 +35,4 @@ for generation in range(generations):
 
 from blocky_bird import game_function
 ann = best.create_neuron()
-print "Score: " + str(game_function(ann, False))
+print "Score: " + str(game_function(ann, True))

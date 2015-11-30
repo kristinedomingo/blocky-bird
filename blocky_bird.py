@@ -97,8 +97,12 @@ def game_function(ann, display):
     # main game loop
     while playing == True:
         for event in pygame.event.get():
+
+            # stop playing if window is closed
             if event.type == QUIT:
                 playing = False
+
+            # jump if space is hit
             if event.type == KEYDOWN and event.key == K_SPACE:
                 bird_vy = -20
 
@@ -110,11 +114,10 @@ def game_function(ann, display):
 
         # feed sensors to the ANN
         sensors = [y_distance_top, y_distance_bottom, 1.0]
-        output = ann.run(sensors)
-
-        # handle output
-        # if(output < 0):
-        #     bird_vy = -20
+        if ann != None:
+            output = ann.run(sensors)
+            if(output < 0):
+                bird_vy = -20
 
         # bird movement
         bird_x += bird_vx
@@ -144,14 +147,14 @@ def game_function(ann, display):
            (bird_y + BIRDSIZE > pipe_hole_y + pipe_hole_height) and
            (bird_x < pipe_solid_x + pipe_width)):
             playing = False
-        
+
         # new pipe
         if(pipe_solid_x < -(pipe_width)):
             pipe_solid_x = WINDOWWIDTH
             pipe_hole_x = pipe_solid_x
             pipe_hole_y = random.randint(20, WINDOWHEIGHT - pipe_hole_height - 20)
             score += 1
-        
+
         # ------------
         # draw objects
         # ------------
@@ -181,8 +184,8 @@ def game_function(ann, display):
     
 if (__name__=='__main__'):
     from neural_network import neuron
-    ann = neuron()
-    print game_function(ann, True)
+    ann = None
+    print "Score: " + str(game_function(ann, True))
     pygame.quit()
     sys.exit()
 #game_function()

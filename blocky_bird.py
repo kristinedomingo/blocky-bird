@@ -25,9 +25,9 @@ pygame.display.set_caption("Blocky Bird!")
 
 #            R    G    B
 WHITE    = (255, 255, 255)
-GREEN    = (0,   255,   0)
-YELLOW   = (255, 255,   0)
-DARKBLUE = (0,   0,   150)
+GREEN    = (0,   150,  39)
+YELLOW   = (255, 241, 118)
+DARKBLUE = (77,  208, 225)
 
 BGCOLOR = DARKBLUE
 BIRDCOLOR = YELLOW
@@ -112,6 +112,9 @@ def game_function(ann, display):
         # distance from bottom of bird to bottom of pipe hole
         y_distance_bottom = (bird_y + BIRDSIZE) - (pipe_hole_y + pipe_hole_height)
 
+        # distance from right of bird to left of pipe
+        x_distance_right = (bird_x + BIRDSIZE) - pipe_solid_x
+
         # feed sensors to the ANN
         sensors = [y_distance_top, y_distance_bottom, 1.0]
         if ann != None:
@@ -162,6 +165,7 @@ def game_function(ann, display):
         if(display):
             # background color
             DISPLAYSURF.fill(BGCOLOR)
+
             # pipe solid
             pygame.draw.rect(DISPLAYSURF, GREEN, (pipe_solid_x, pipe_solid_y, pipe_width, pipe_height))
 
@@ -186,6 +190,4 @@ if (__name__=='__main__'):
     from neural_network import neuron
     ann = None
     print "Score: " + str(game_function(ann, True))
-    pygame.quit()
-    sys.exit()
 #game_function()

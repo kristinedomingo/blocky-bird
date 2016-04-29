@@ -2,36 +2,39 @@ import random
 import blocky_bird
 
 random.seed(0)
+problem_size = 3
 
-class dna:
-	problem_size = 3
+class individual:
+	global problem_size
+
 	def __init__(self):
-		self.x=[]
-		for k in range(0,dna.problem_size):
-			self.x.append(random.uniform(-3.0,3.0)) 
+		self.gene = []
+		for k in range(0, problem_size):
+			self.gene.append(random.uniform(-problem_size, problem_size))
+
 	def copy(self):
-		new_indiv=dna()
-		new_indiv.x=self.x[:]
+		new_indiv = individual()
+		new_indiv.gene = list(self.gene)
 		return new_indiv
 
 	def mutate(self):
 		new_indiv = self.copy()
-		to_mutate=random.randint(0,dna.problem_size-1)
-		new_indiv.x[to_mutate]+=random.uniform(-1,1)
+		to_mutate = random.randint(0, problem_size - 1)
+		new_indiv.gene[to_mutate] += random.uniform(-1, 1)
 		return new_indiv
 
 	def crossover(self,other):
-		new_indiv = dna()
-		for k in range(0,dna.problem_size):
+		new_indiv = individual()
+		for k in range(0, problem_size):
 			if random.random()>0.5:
-				new_indiv.x[k]=self.x[k]
+				new_indiv.gene[k]=self.gene[k]
 			else:
-				new_indiv.x[k]=other.x[k]
+				new_indiv.gene[k]=other.gene[k]
 		return new_indiv
 
 	def create_neuron(self):
 		new_neuron = neuron()
-		new_neuron.weights=self.x
+		new_neuron.weights=self.gene
 		return new_neuron
 
 	def evaluate(self):
@@ -40,22 +43,23 @@ class dna:
 
 
 class neuron:
-	def __init__(self):
-		self.weights=[random.uniform(-1.0,1.0),
-					  random.uniform(-1.0,1.0),
-					  random.uniform(-1.0,1.0)]
+	global problem_size
 
-	def run(self,inputs):
-		total_signal=0.0
-		for k in [0,1,2]:
-			total_signal+=self.weights[k]*inputs[k]
-		if total_signal>0.0:
+	def __init__(self):
+		self.weights=[random.uniform(-1.0, 1.0) for i in range(problem_size)]
+
+	def run(self, inputs):
+		total_signal = 0.0
+		for k in range(problem_size):
+			total_signal += self.weights[k] * inputs[k]
+
+		if total_signal > 0.0:
 			return 1.0
 		else:
 			return -1.0
 
 
 def evaluate_ann(ann):
-	score=blocky_bird.game_function(ann, False)
+	score = blocky_bird.game_function(ann, False)
 	return score
 
